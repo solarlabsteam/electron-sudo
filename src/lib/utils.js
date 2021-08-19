@@ -28,12 +28,16 @@ async function exec(cmd, options={}) {
 function spawn(cmd, args, options={}) {
     let cp = child.spawn(cmd, args, {...options, shell: true});
     cp.output = { stdout: new Buffer(0), stderr: new Buffer(0) };
-    cp.stdout.on('data', (data) => {
-        cp.output.stdout = concat(data, cp.output.stdout);
-    });
-    cp.stderr.on('data', (data) => {
-        cp.output.stderr = concat(data, cp.output.stderr);
-    });
+    if (cp.stdout) {
+        cp.stdout.on('data', (data) => {
+            cp.output.stdout = concat(data, cp.output.stdout);
+        });
+    }
+    if (cp.stderr) {
+        cp.stderr.on('data', (data) => {
+            cp.output.stderr = concat(data, cp.output.stderr);
+        });
+    }
     return cp;
 }
 
