@@ -107,6 +107,8 @@ class SudoerDarwin extends SudoerUnix {
         } else if (options.icns && options.icns.trim().length === 0) {
             throw new Error('options.icns must be a non-empty string if provided.');
         }
+
+        this.appletDir = options.appletDir || `${__dirname}/bin`
         this.up = false;
     }
 
@@ -185,7 +187,7 @@ class SudoerDarwin extends SudoerUnix {
             let icon = await self.readIcns(),
                 hash = self.hash(icon);
             // Copy applet to temporary directory
-            let source = join(`${__static}/bin`, 'applet.app'),
+            let source = join(this.appletDir, 'applet.app'),
                 target = join(self.tmpdir, hash, `${self.options.name}.app`);
             try {
                 await mkdir(dirname(target));
